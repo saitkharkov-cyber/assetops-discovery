@@ -93,3 +93,76 @@ CREATE TABLE observations (
     FOREIGN KEY(company_id) REFERENCES companies(id),
     FOREIGN KEY(observation_type_id) REFERENCES observation_types(id)
 );
+CREATE TABLE evidence (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    observation_id INTEGER NOT NULL,
+
+    type TEXT NOT NULL,
+    source TEXT NOT NULL,
+
+    description TEXT,
+
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY(observation_id) REFERENCES observations(id)
+);
+CREATE TABLE contacts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    company_id INTEGER NOT NULL,
+
+    full_name TEXT,
+    position TEXT,
+
+    email TEXT,
+    phone TEXT,
+    linkedin TEXT,
+
+    is_decision_maker INTEGER DEFAULT 0,
+
+    notes TEXT,
+
+    FOREIGN KEY(company_id) REFERENCES companies(id)
+);
+CREATE TABLE interviews (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    company_id INTEGER NOT NULL,
+    contact_id INTEGER,
+
+    interview_date DATETIME,
+
+    status TEXT NOT NULL,
+
+    summary TEXT,
+
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY(company_id) REFERENCES companies(id),
+    FOREIGN KEY(contact_id) REFERENCES contacts(id)
+);
+CREATE TABLE company_tags (
+    company_id INTEGER NOT NULL,
+    tag TEXT NOT NULL,
+
+    PRIMARY KEY (company_id, tag),
+
+    FOREIGN KEY(company_id) REFERENCES companies(id)
+);
+CREATE TABLE tasks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    company_id INTEGER NOT NULL,
+
+    title TEXT NOT NULL,
+    status TEXT NOT NULL,
+
+    due_date DATETIME,
+
+    notes TEXT,
+
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY(company_id) REFERENCES companies(id)
+);
